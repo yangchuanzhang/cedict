@@ -18,7 +18,8 @@ var db *sql.DB
 var dbLoaded = false
 
 func LoadDb() (err error) {
-  db, err = sql.Open("sqlite3", "./cedict.sqlite3")
+  //FIXME get path to db file from somewhere else
+  db, err = sql.Open("sqlite3", "/Users/json/cedict.sqlite3")
   if err == nil {
     dbLoaded = true
   }
@@ -66,6 +67,6 @@ func FindRecords(word string, charSet chinese.CharacterSet) ([]Record, error) {
 func main() {
   LoadDb()
 
-  fmt.Println(FindRecords("的asdf", chinese.Trad))
+  fmt.Println(FindRecords("的", chinese.Trad))
 
 }
