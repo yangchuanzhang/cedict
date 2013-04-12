@@ -35,9 +35,15 @@ func CloseDb() {
   }
 }
 
+func IsDbLoaded() bool {
+  return dbLoaded
+}
+
 func FindRecords(word string, charSet chinese.CharacterSet) ([]Record, error) {
   if !dbLoaded {
-    return nil, fmt.Errorf("cedict: Database not loaded")
+    // FIXME deal with errors
+    LoadDb()
+    defer CloseDb()
   }
 
   sql := "SELECT * FROM dict "
