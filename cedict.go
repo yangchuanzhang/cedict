@@ -60,8 +60,9 @@ func FindRecords(word string, charSet chinese.CharacterSet) ([]Record, error) {
   records := make([]Record, 0)
 
   for rows.Next() {
+    var id, runecount int
     var trad, simp, pinyin, english string
-    rows.Scan(&trad, &simp, &pinyin, &english)
+    rows.Scan(&id, &trad, &simp, &pinyin, &english, &runecount)
     records = append(records, Record{Trad: trad, Simp: simp, Pinyin: pinyin, English: english})
   }
 
