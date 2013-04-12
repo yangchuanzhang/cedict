@@ -1,4 +1,4 @@
-package main
+package cedict
 
 import (
   "database/sql"
@@ -18,30 +18,34 @@ var db *sql.DB
 var dbLoaded = false
 
 func LoadDb() (err error) {
-  //FIXME get path to db file from somewhere else
-  db, err = sql.Open("sqlite3", "/Users/json/cedict.sqlite3")
-  if err == nil {
-    dbLoaded = true
+  if !dbLoaded {
+    //FIXME get path to db file from somewhere else
+    db, err = sql.Open("sqlite3", "/Users/json/cedict.sqlite3")
+    if err == nil {
+      dbLoaded = true
+    }
   }
   return
 }
 
 func CloseDb() {
-  db.Close()
-  dbLoaded = false
+  if dbLoaded {
+    db.Close()
+    dbLoaded = false
+  }
 }
 
 func FindRecords(word string, charSet chinese.CharacterSet) ([]Record, error) {
   if !dbLoaded {
     return nil, fmt.Errorf("cedict: Database not loaded")
   }
-  
+
   sql := "SELECT * FROM dict "
 
   switch charSet {
-  case chinese.Trad: 
+    case chinese.Trad: 
     sql += "WHERE trad = '"+word+"'"
-  case chinese.Simp: 
+    case chinese.Simp: 
     sql += "WHERE simp = '"+word+"'"
   default:
     return nil, fmt.Errorf("cedict: unrecognized character set")
