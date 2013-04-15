@@ -4,21 +4,37 @@ import (
   "github.com/yangchuanzhang/chinese"
 )
 
-func DetermineCharacterSet(text string) chinese.CharacterSet {
+// DetermineCharSet takes a string and returns a variable
+// of type chinese.CharSet indicating whether the text is
+// in simplified or traditional characters. In ambiguous cases,
+// where all characters can be interpreted as both simplified and
+// traditional (such as "你好"), this method returns chinese.Trad.
+// It also returns chinese.Trad for characters where one simplified
+// character maps to multiple traditional ones like "后".
+// For texts that are more than 1-2 sentences in length, this method
+// is usually very accurate.
+func DetermineCharSet(text string) chinese.CharSet {
   if !dbLoaded {
     // FIXME deal with errors
     LoadDb()
     defer CloseDb()
   }
 
+  // go through all the runes in the string and check for each
+  // whether there's a simplified but no traditional match in
+  // the db. If there is, the text is in simplified characters.
   for _,c := range text {
-    isTradChar := false
+
+    // search for a traditional record first, if there is,
+    // skip to the next rune
+    hasTradRecord := false
     tradRecords, _ := FindRecords(string(c), chinese.Trad)
     if len(tradRecords) > 0 {
-      isTradChar = true
+      hasTradRecord = true
     }
 
-    if !isTradChar {
+    // if there's no traditional record, search for simplified records
+    if !hasTradRecord {
       simpRecords, _ := FindRecords(string(c), chinese.Simp)
       if len(simpRecords) > 0 {
         return chinese.Simp
