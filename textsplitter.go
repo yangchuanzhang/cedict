@@ -1,12 +1,9 @@
 package cedict
 
-import (
-  "github.com/yangchuanzhang/chinese"
-)
 
 type WordType int
 
-cont (
+const (
   WordTypeString = iota
   WordTypeRecords
 )
@@ -14,10 +11,12 @@ cont (
 type ChineseTextWord struct {
   T WordType
   S string
-  R []records
+  R []Record
 }
 
+// Once implemented, this method will split a string of chinese text
+// into a slice of words of type WordType.
 func SplitChineseTextIntoWords(text string) []ChineseTextWord {
-  
+  // TODO: implement this method (low priority)
   return nil
 }
