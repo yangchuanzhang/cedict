@@ -51,8 +51,10 @@ func isDbLoaded() bool {
 // []Record and an error. It returns an empty slice if no matches could be found.
 func FindRecords(word string, charSet chinese.CharSet) ([]Record, error) {
   if !dbLoaded {
-    // FIXME deal with errors
-    LoadDb()
+    err := LoadDb()
+    if err != nil {
+      return nil, err
+    }
     defer CloseDb()
   }
 
