@@ -88,3 +88,8 @@ func FindRecords(word string, charSet chinese.CharSet) ([]Record, error) {
 
   return records, nil
 }
+
+// This method implements the Stringer interface for Record
+func (r Record) String() string {
+  return fmt.Sprintf("[simp: %q  trad: %q  pinyin: %q  english: %q]", r.Simp, r.Trad, r.Pinyin, r.English)
+}
