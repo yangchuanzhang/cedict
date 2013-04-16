@@ -50,6 +50,7 @@ func isDbLoaded() bool {
 // FindRecords searches the database of cedict records and returns a slice of type
 // []Record and an error. It returns an empty slice if no matches could be found.
 func FindRecords(word string, charSet chinese.CharSet) ([]Record, error) {
+  // FIXME: This is not threadsafe!!
   if !dbLoaded {
     err := LoadDb()
     if err != nil {
