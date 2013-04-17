@@ -14,8 +14,9 @@ import (
 // For texts that are more than 1-2 sentences in length, this method
 // is usually very accurate.
 func DetermineCharSet(text string) chinese.CharSet {
+  // FIXME: This is not threadsafe!!
   if !dbLoaded {
-    // FIXME deal with errors
+    // FIXME: Handle error
     LoadDb()
     defer CloseDb()
   }
