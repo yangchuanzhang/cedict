@@ -8,6 +8,7 @@ import (
   _ "github.com/mattn/go-sqlite3"
   "fmt"
   "github.com/yangchuanzhang/chinese"
+  "os"
 )
 
 type Record struct {
@@ -26,8 +27,16 @@ var dbLoaded = false
 // calls to sql.Open and Close.
 func LoadDb() (err error) {
   if !dbLoaded {
-    //FIXME get path to db file from somewhere else
-    db, err = sql.Open("sqlite3", "/Users/json/cedict.sqlite3")
+
+    // get db filepath from environment variable CEDICT_DB
+    // or assume it's in the current directory
+    dbPath := os.Getenv("CEDICT_DB")
+    if dbPath == "" {
+      dbPath := "./cedict.sqlite3"
+    }
+
+    // attempt to load database
+    db, err = sql.Open("sqlite3", dbPath)
     if err == nil {
       dbLoaded = true
     }
