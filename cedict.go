@@ -32,7 +32,7 @@ func LoadDb() (err error) {
     // or assume it's in the current directory
     dbPath := os.Getenv("CEDICT_DB")
     if dbPath == "" {
-      dbPath := "./cedict.sqlite3"
+      dbPath = "./cedict.sqlite3"
     }
 
     // attempt to load database
