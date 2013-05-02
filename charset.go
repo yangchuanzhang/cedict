@@ -46,5 +46,38 @@ func DetermineCharSet(text string) chinese.CharSet {
   return chinese.Trad
 }
 
+var maxRunecount = -1
+func Simp2Trad(simp string) (string, error) {
+  // FIXME: This is not threadsafe!!
+  if !dbLoaded {
+    // FIXME: Handle error
+    LoadDb()
+    defer CloseDb()
+  }
+
+  // maxRunecount doesn't get updated when a different db is loaded
+  if maxRunecount == -1 {
+
+    sqlMaxRunecount := "SELECT MAX(runecount) AS maxRunecount FROM dict"
+
+    rows, err := db.Query(sqlMaxRunecount)
+    if err != nil {
+      return "", err
+    }
+    defer rows.Close()
+
+    rows.Scan(&maxRunecount)
+  }
+
+  //output := ""
 
 
+
+  return "",nil
+
+}
+
+// TODO loop over string instead of type cast, might be faster
+func runeSubstring(str string, s, e int) string {
+  return string([]rune(str)[s:e])
+}
