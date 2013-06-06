@@ -18,8 +18,13 @@ type Record struct {
   English string
 }
 
+//func (r Record) String() string {
+//  return fmt.Sprintf("%b", b)
+//}
+
 var db *sql.DB
 var dbLoaded = false
+var maxRunecount int
 
 // LoadDb opens the database file. It's not necessary to call this function
 // explicitly, as all functions that access the db open and close it themselves,
@@ -27,12 +32,11 @@ var dbLoaded = false
 // calls to sql.Open and Close.
 func LoadDb() (err error) {
   if !dbLoaded {
-
     // get db filepath from environment variable CEDICT_DB
     // or assume it's in the current directory
     dbPath := os.Getenv("CEDICT_DB")
     if dbPath == "" {
-      dbPath = "./cedict.sqlite3"
+      dbPath = "/Users/json/cedict.sqlite3"
     }
 
     // attempt to load database
@@ -40,6 +44,18 @@ func LoadDb() (err error) {
     if err == nil {
       dbLoaded = true
     }
+
+    // get max runecount
+    sqlMaxRunecount := "SELECT MAX(runecount) AS maxRunecount FROM dict"
+
+    rows, err := db.Query(sqlMaxRunecount)
+    if err != nil {
+      return err
+    }
+    defer rows.Close()
+
+    rows.Next()
+    rows.Scan(&maxRunecount)
   }
   return
 }
@@ -59,15 +75,6 @@ func isDbLoaded() bool {
 // FindRecords searches the database of cedict records and returns a slice of type
 // []Record and an error. It returns an empty slice if no matches could be found.
 func FindRecords(word string, charSet chinese.CharSet) ([]Record, error) {
-  // FIXME: This is not threadsafe!!
-  if !dbLoaded {
-    err := LoadDb()
-    if err != nil {
-      return nil, err
-    }
-    defer CloseDb()
-  }
-
   // construct db query based on charSet
   sql := "SELECT * FROM dict "
 

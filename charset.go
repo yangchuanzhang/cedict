@@ -14,13 +14,6 @@ import (
 // For texts that are more than 1-2 sentences in length, this method
 // is usually very accurate.
 func DetermineCharSet(text string) chinese.CharSet {
-  // FIXME: This is not threadsafe!!
-  if !dbLoaded {
-    // FIXME: Handle error
-    LoadDb()
-    defer CloseDb()
-  }
-
   // go through all the runes in the string and check for each
   // whether there's a simplified but no traditional match in
   // the db. If there is, the text is in simplified characters.
@@ -46,35 +39,10 @@ func DetermineCharSet(text string) chinese.CharSet {
   return chinese.Trad
 }
 
-var maxRunecount = -1
+// TODO implement this function
 func Simp2Trad(simp string) (string, error) {
-  // FIXME: This is not threadsafe!!
-  if !dbLoaded {
-    // FIXME: Handle error
-    LoadDb()
-    defer CloseDb()
-  }
 
-  // maxRunecount doesn't get updated when a different db is loaded
-  if maxRunecount == -1 {
-
-    sqlMaxRunecount := "SELECT MAX(runecount) AS maxRunecount FROM dict"
-
-    rows, err := db.Query(sqlMaxRunecount)
-    if err != nil {
-      return "", err
-    }
-    defer rows.Close()
-
-    rows.Scan(&maxRunecount)
-  }
-
-  //output := ""
-
-
-
-  return "",nil
-
+  panic("asdf")
 }
 
 // TODO loop over string instead of type cast, might be faster

@@ -1,5 +1,6 @@
 package cedict
 
+//import "fmt"
 
 type WordType int
 
@@ -17,6 +18,39 @@ type ChineseTextWord struct {
 // Once implemented, this method will split a string of chinese text
 // into a slice of words of type WordType.
 func SplitChineseTextIntoWords(text string) []ChineseTextWord {
-  // TODO: implement this method (low priority)
-  return nil
+  output := make([]ChineseTextWord,0)
+
+  charSet := DetermineCharSet(text)
+
+  index := 0
+
+  for index < len([]rune(text)) {
+    for substringLength := maxRunecount; substringLength >= 0; substringLength-=1 {
+      if substringLength == 0 {
+        output = append(output, ChineseTextWord{T: WordTypeString, S: string([]rune(text)[index]), R: nil})
+        index +=1
+        break
+      }
+
+      var substring string
+
+      if index+substringLength > len([]rune(text))-1 {
+        substring = string([]rune(text)[index:])
+      } else {
+        substring = string([]rune(text)[index:index+substringLength])
+      }
+
+      records,_ := FindRecords(substring, charSet)
+      if len(records) > 0 {
+        output = append(output, ChineseTextWord{T: WordTypeRecords, S: "", R: records})
+        index += substringLength
+        break
+      }
+    }
+  }
+
+
+
+  return output
 }
+
