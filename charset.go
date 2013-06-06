@@ -39,10 +39,20 @@ func DetermineCharSet(text string) chinese.CharSet {
   return chinese.Trad
 }
 
-// TODO implement this function
+// TODO comment this function
 func Simp2Trad(simp string) (string, error) {
+  t := SplitChineseTextIntoWords(simp)
+  output := ""
 
-  panic("asdf")
+  for _,w := range t {
+    if w.T == WordTypeString {
+      output += w.S
+    } else {
+      output += w.R[0].Trad
+    }
+  }
+
+  return output, nil
 }
 
 // TODO loop over string instead of type cast, might be faster
