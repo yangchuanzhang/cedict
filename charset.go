@@ -39,11 +39,21 @@ func DetermineCharSet(text string) chinese.CharSet {
   return chinese.Trad
 }
 
-// TODO comment this function
+// TODO improve this function by always choosing the simpler
+//      character when there are multiple records
 func Simp2Trad(simp string) (string, error) {
-  t := SplitChineseTextIntoWords(simp)
-  output := ""
+  // return simp if the text already is in traditional characters
+  if DetermineCharSet(simp) == chinese.Trad {
+    return simp, nil
+  }
 
+  t,err := SplitChineseTextIntoWords(simp)
+  if err != nil {
+    return "", err
+  }
+
+  // turn t into a string
+  output := ""
   for _,w := range t {
     if w.T == WordTypeString {
       output += w.S
@@ -54,4 +64,5 @@ func Simp2Trad(simp string) (string, error) {
 
   return output, nil
 }
+
 
