@@ -55,7 +55,3 @@ func Simp2Trad(simp string) (string, error) {
   return output, nil
 }
 
-// TODO loop over string instead of type cast, might be faster
-func runeSubstring(str string, s, e int) string {
-  return string([]rune(str)[s:e])
-}
