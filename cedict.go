@@ -9,6 +9,7 @@ import (
   "fmt"
   "github.com/yangchuanzhang/chinese"
   "os"
+  "github.com/yangchuanzhang/pinyin"
 )
 
 type Record struct {
@@ -32,12 +33,12 @@ func (r Record) String() string {
 }
 
 // Implement chinese.ToHTMLer
-func (r Record ToHTML(toneColors []string) string {
+func (r Record) ToHTML(toneColors []string) string {
   var html string
 
   html += r.Trad
   html += "&nbsp;&nbsp;&nbsp; "
-  html += r.Trad += pinyin.Num2DiaCol(r.Pinyin, colors, "&nbsp;")
+  html += pinyin.Num2DiaCol(r.Pinyin, toneColors, "&nbsp;")
   html += "&nbsp;&nbsp;&nbsp; "
   html += r.English
 
