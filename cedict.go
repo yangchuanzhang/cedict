@@ -18,6 +18,14 @@ type Record struct {
   English string
 }
 
+func (r Record) WordByCharSet(c chinese.CharSet) string {
+  if c == chinese.Trad {
+    return r.Trad
+  } 
+  // else
+  return r.Simp
+}
+
 //func (r Record) String() string {
 //  return fmt.Sprintf("%b", b)
 //}
