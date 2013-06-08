@@ -26,9 +26,23 @@ func (r Record) WordByCharSet(c chinese.CharSet) string {
   return r.Simp
 }
 
-//func (r Record) String() string {
-//  return fmt.Sprintf("%b", b)
-//}
+// This method implements the Stringer interface for Record
+func (r Record) String() string {
+  return fmt.Sprintf("[simp: %q  trad: %q  pinyin: %q  english: %q]", r.Simp, r.Trad, r.Pinyin, r.English)
+}
+
+// Implement chinese.ToHTMLer
+func (r Record ToHTML(toneColors []string) string {
+  var html string
+
+  html += r.Trad
+  html += "&nbsp;&nbsp;&nbsp; "
+  html += r.Trad += pinyin.Num2DiaCol(r.Pinyin, colors, "&nbsp;")
+  html += "&nbsp;&nbsp;&nbsp; "
+  html += r.English
+
+  return html
+}
 
 var db *sql.DB
 var dbLoaded = false
@@ -116,7 +130,4 @@ func FindRecords(word string, charSet chinese.CharSet) ([]Record, error) {
   return records, nil
 }
 
-// This method implements the Stringer interface for Record
-func (r Record) String() string {
-  return fmt.Sprintf("[simp: %q  trad: %q  pinyin: %q  english: %q]", r.Simp, r.Trad, r.Pinyin, r.English)
-}
+
