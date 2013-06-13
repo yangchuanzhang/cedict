@@ -65,4 +65,26 @@ func Simp2Trad(simp string) (string, error) {
   return output, nil
 }
 
+func Trad2Simp(trad string) (string, error) {
+  // return simp if the text already is in traditional characters
+  if DetermineCharSet(simp) == chinese.Simp {
+    return trad, nil
+  }
 
+  t,err := SplitChineseTextIntoWords(trad)
+  if err != nil {
+    return "", err
+  }
+
+  // turn t into a string
+  output := ""
+  for _,w := range t {
+    if w.T == WordTypeString {
+      output += w.S
+    } else {
+      output += w.R[0].Simp
+    }
+  }
+
+  return output, nil
+}
