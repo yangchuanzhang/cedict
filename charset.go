@@ -67,7 +67,7 @@ func Simp2Trad(simp string) (string, error) {
 
 func Trad2Simp(trad string) (string, error) {
   // return simp if the text already is in traditional characters
-  if DetermineCharSet(simp) == chinese.Simp {
+  if DetermineCharSet(trad) == chinese.Simp {
     return trad, nil
   }
 
